@@ -14,5 +14,5 @@
 */
 
 $router->get('/[{id}]', function ($id = null) use ($router) {
-    return "Hello, $id";
+    return view('home', ['name' => $id]);
 });
