@@ -13,6 +13,6 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/[{id}]', function ($id = null) use ($router) {
+    return "Hello, $id";
 });
