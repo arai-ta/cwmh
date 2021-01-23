@@ -13,8 +13,10 @@
 |
 */
 
-$router->get('/[{id}]', function ($id = null) use ($router) {
-    return view('home', [
-        'name' => $id,
-    ]);
+$router->get('/', function () {
+    return view('home');
+});
+
+$router->get('/start', function () {
+    return "redirect to Authorization Endpoint!";
 });
