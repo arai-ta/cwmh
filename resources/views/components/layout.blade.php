@@ -1,7 +1,8 @@
 <html>
     <head>
         <title>
-@isset($title) {{ $title . ' - ' }} @endisset Chatwork 通知履歴
+@isset($title) {{ $title . ' - ' }} @endisset
+{{ env('APP_NAME') }}
         </title>
     </head>
     <body>
