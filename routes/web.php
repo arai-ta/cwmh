@@ -21,11 +21,11 @@ $router->get('/start', function () {
     $provider = new ChatWork\OAuth2\Client\ChatWorkProvider(
         env('OAUTH_CLIENT_ID'),
         env('OAUTH_CLIENT_SECRET'),
-        'https://localhost/callback'
+        url('/callback')
     );
 
     $url = $provider->getAuthorizationUrl([
-        'scope' => ['offline_access', 'users.profile.me:read', 'rooms.messages:read']
+        'scope' => ['offline_access', 'users.profile.me:read']
     ]);
 
     $state = $provider->getState();
