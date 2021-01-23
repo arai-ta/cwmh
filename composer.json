@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "chatwork/oauth2-chatwork": "^0.1.1",
         "laravel/lumen-framework": "^8.0"
     },
     "require-dev": {
