@@ -18,5 +18,19 @@ $router->get('/', function () {
 });
 
 $router->get('/start', function () {
+    $provider = new ChatWork\OAuth2\Client\ChatWorkProvider(
+        env('OAUTH_CLIENT_ID'),
+        env('OAUTH_CLIENT_SECRET'),
+        'https://localhost/callback'
+    );
+
+    $url = $provider->getAuthorizationUrl([
+        'scope' => ['offline_access', 'users.profile.me:read', 'rooms.messages:read']
+    ]);
+
+    $state = $provider->getState();
+
+    dump($url, $state);
+
     return "redirect to Authorization Endpoint!";
 });
