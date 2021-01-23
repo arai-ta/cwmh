@@ -14,5 +14,7 @@
 */
 
 $router->get('/[{id}]', function ($id = null) use ($router) {
-    return view('home', ['name' => $id]);
+    return view('home', [
+        'name' => $id,
+    ]);
 });
