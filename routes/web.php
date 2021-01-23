@@ -21,7 +21,7 @@ $router->get('/start', function () {
     $provider = new ChatWork\OAuth2\Client\ChatWorkProvider(
         env('OAUTH_CLIENT_ID'),
         env('OAUTH_CLIENT_SECRET'),
-        url('/callback')
+        url('/callback', [], true)
     );
 
     $url = $provider->getAuthorizationUrl([
