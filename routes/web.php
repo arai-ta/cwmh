@@ -17,7 +17,7 @@ $router->get('/', function () {
     return view('home');
 });
 
-$router->get('/start', function () {
+$router->get('/start', function (\Illuminate\Http\Request $request) {
     $provider = new ChatWork\OAuth2\Client\ChatWorkProvider(
         env('OAUTH_CLIENT_ID'),
         env('OAUTH_CLIENT_SECRET'),
@@ -31,6 +31,11 @@ $router->get('/start', function () {
     $state = $provider->getState();
 
     dump($url, $state);
+
+    $count = $request->session()->get('count', 0);
+    $request->session()->put('count', ++$count);
+
+    dump($count);
 
     return "redirect to Authorization Endpoint!";
 });
