@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Illuminate\Support\Facades\Log;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -30,12 +32,9 @@ $router->get('/start', function (\Illuminate\Http\Request $request) {
 
     $state = $provider->getState();
 
-    dump($url, $state);
+    Log::info("state = {$state}, url = {$url}");
 
-    $count = $request->session()->get('count', 0);
-    $request->session()->put('count', ++$count);
-
-    dump($count);
+    $request->session()->put('state', $state);
 
     return "redirect to Authorization Endpoint!";
 });
