@@ -36,5 +36,5 @@ $router->get('/start', function (\Illuminate\Http\Request $request) {
 
     $request->session()->put('state', $state);
 
-    return "redirect to Authorization Endpoint!";
+    return redirect($url);
 });
