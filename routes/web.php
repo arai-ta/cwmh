@@ -60,7 +60,7 @@ $router->get('/callback', function (\Illuminate\Http\Request $request) {
     $stack->push(
         Middleware::log(
             $logger,
-            new MessageFormatter('{uri} : {req_body} -> {res_body}')
+            new MessageFormatter('{uri} : {req_body} ({req_headers}) --> {res_body}')
         )
     );
     $client = new GuzzleHttp\Client(['handler' => $stack]);
