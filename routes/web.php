@@ -34,7 +34,7 @@ $router->get('/start', function (\Illuminate\Http\Request $request) {
     );
 
     $url = $provider->getAuthorizationUrl([
-        'scope' => ['offline_access', 'users.profile.me:read']
+        'scope' => ['users.profile.me:read']
     ]);
 
     $state = $provider->getState();
