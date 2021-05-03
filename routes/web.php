@@ -23,8 +23,6 @@ use Monolog\Logger as MonologLogger;
 */
 
 $router->get('/', function () {
-    $results = app('db')->select("SELECT * FROM users");
-    dd($results);
     return view('home');
 });
 
