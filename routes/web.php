@@ -25,7 +25,12 @@ $router->get('/', function () {
 $router->get('/start', function (Request $request, ChatWorkProvider $provider) {
 
     $url = $provider->getAuthorizationUrl([
-        'scope' => ['users.profile.me:read']
+        'scope' => [
+            'users.profile.me:read',
+            'rooms:write',
+            'rooms.messages:write',
+            'offline_access',
+        ]
     ]);
 
     $state = $provider->getState();
