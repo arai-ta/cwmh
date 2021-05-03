@@ -6,6 +6,7 @@ use ChatWork\OAuth2\Client\ChatWorkProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Grant\AuthorizationCode;
+use League\OAuth2\Client\Grant\RefreshToken;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,9 +67,42 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
         ]);
     }
 
-    dump($token);
+    $owner = $provider->getResourceOwner($token);
 
-    dd($provider->getResourceOwner($token));
+    $accountId = $owner->getId();
+    $request->session()->put('account_id', $accountId);
+
+    $user = \App\Models\User::query()
+        ->where('account_id', $accountId)
+        ->first();
+
+    if ($user) {
+        $user->token = $token->jsonSerialize();
+        $user->save();
+    } else {
+        $user = \App\Models\User::save([
+            'account_id' => $accountId,
+            'token' => $token->jsonSerialize(),
+        ]);
+    }
+
+    return redirect('./config');
+});
+
+$router->get('/config', function (Request $request, ChatWorkProvider $provider) {
+
+    $accountId = $request->session()->get('account_id');
+
+    $user = \App\Models\User::query()->where('account_id', $accountId)->first();
+
+    $token = new \League\OAuth2\Client\Token\AccessToken($user->token);
+
+    if ($token->hasExpired()) {
+        $newToken = $provider->getAccessToken(new RefreshToken(), ['code' => $token->getRefreshToken()]);
+        $user->token = $newToken->jsonSerialize();
+        $user->save();
+    }
 
     return "OK";
 });
+
