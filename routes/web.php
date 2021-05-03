@@ -42,13 +42,28 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
 
     if ($state !== $request->input('state')) {
         Log::error("invalid state error. session = {$state}, request = {$request->input('state')}");
-        return "invalid state error";
+        return view("error", [
+            'message' => "invalid state error"
+        ]);
     }
 
+    if ($request->input('error', false)) {
+        return view("error", [
+            'message' => "service linkage error:".$request->input('error')
+        ]);
+    }
 
-    $token = $provider->getAccessToken(new AuthorizationCode(), ['code' => $request->input('code')]);
+    try {
+        $token = $provider->getAccessToken(new AuthorizationCode(), ['code' => $request->input('code')]);
+    } catch (League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+        return view("error", [
+            'message' => "service linkage error:".$e->getMessage()
+        ]);
+    }
 
     dump($token);
+
+    dd($provider->getResourceOwner($token));
 
     return "OK";
 });
