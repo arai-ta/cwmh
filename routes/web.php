@@ -2,14 +2,10 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Middleware;
-use Illuminate\Log\Logger;
+use ChatWork\OAuth2\Client\ChatWorkProvider;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Grant\AuthorizationCode;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger as MonologLogger;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +22,7 @@ $router->get('/', function () {
     return view('home');
 });
 
-$router->get('/start', function (\Illuminate\Http\Request $request) {
-    $provider = new ChatWork\OAuth2\Client\ChatWorkProvider(
-        env('OAUTH_CLIENT_ID'),
-        env('OAUTH_CLIENT_SECRET'),
-        url('/callback', [], true)
-    );
+$router->get('/start', function (Request $request, ChatWorkProvider $provider) {
 
     $url = $provider->getAuthorizationUrl([
         'scope' => ['users.profile.me:read']
@@ -46,7 +37,7 @@ $router->get('/start', function (\Illuminate\Http\Request $request) {
     return redirect($url);
 });
 
-$router->get('/callback', function (\Illuminate\Http\Request $request) {
+$router->get('/callback', function (Request $request, ChatWorkProvider $provider) {
     $state = $request->session()->get('state');
 
     if ($state !== $request->input('state')) {
@@ -54,25 +45,6 @@ $router->get('/callback', function (\Illuminate\Http\Request $request) {
         return "invalid state error";
     }
 
-    $logger = new MonologLogger('http_logging');
-    $logger->pushHandler(new StreamHandler('../storage/logs/http.log', MonologLogger::DEBUG));
-    $stack = HandlerStack::create();
-    $stack->push(
-        Middleware::log(
-            $logger,
-            new MessageFormatter('{uri} : {req_body} ({req_headers}) --> {res_body}')
-        )
-    );
-    $client = new GuzzleHttp\Client(['handler' => $stack]);
-
-    $provider = new ChatWork\OAuth2\Client\ChatWorkProvider(
-        env('OAUTH_CLIENT_ID'),
-        env('OAUTH_CLIENT_SECRET'),
-        url('/callback', [], true),
-        [
-            'httpClient' => $client
-        ]
-    );
 
     $token = $provider->getAccessToken(new AuthorizationCode(), ['code' => $request->input('code')]);
 
