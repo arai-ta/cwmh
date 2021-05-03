@@ -5,7 +5,8 @@ services:
         ports:
             - 3306:3306
         environment:
-            - MYSQL_ROOT_PASSWORD=secret
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: mention_history
         # MySQL 8でデフォルト値が変更になり、PDOがまだ対応していないオプションを戻す
         # https://www.php.net/manual/ja/ref.pdo-mysql.php
         # https://hub.docker.com/_/mysql
