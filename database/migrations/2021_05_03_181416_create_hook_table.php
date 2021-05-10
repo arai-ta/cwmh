@@ -13,7 +13,7 @@ class CreateHookTable extends Migration
      */
     public function up()
     {
-        Schema::create('hook', function (Blueprint $table) {
+        Schema::create('hooks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->unique();
             $table->string('key', 32);
@@ -29,6 +29,6 @@ class CreateHookTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hook');
+        Schema::dropIfExists('hooks');
     }
 }
