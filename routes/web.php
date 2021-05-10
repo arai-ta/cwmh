@@ -104,11 +104,45 @@ $router->get('/config', function (Request $request, ChatWorkProvider $provider) 
     $token = new \League\OAuth2\Client\Token\AccessToken($user->tokenAsArray());
 
     if ($token->hasExpired()) {
-        $newToken = $provider->getAccessToken(new RefreshToken(), ['code' => $token->getRefreshToken()]);
+        $newToken = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
         $user->token = $newToken->jsonSerialize();
         $user->save();
     }
 
-    return "OK";
+    return view('config', [
+        'hook' => $user->hook
+    ]);
 });
 
+
+$router->post('/config', function (Request $request, ChatWorkProvider $provider) {
+
+    $accountId = $request->session()->get('account_id');
+
+    /** @var \App\Models\User $user */
+    $user = \App\Models\User::query()->where('account_id', $accountId)->first();
+
+    if (!$user) {
+        $request->session()->forget('account_id');
+        return redirect('/');
+    }
+
+    $token = new \League\OAuth2\Client\Token\AccessToken($user->tokenAsArray());
+
+    if ($token->hasExpired()) {
+        $newToken = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
+        $user->token = $newToken->jsonSerialize();
+        $user->save();
+    }
+
+    $hook = new \App\Models\Hook([
+        // key
+        // target room id
+    ]);
+    $user->hook = $hook;
+    $user->save();
+
+    return view('config', [
+        'hook' => $user->hook
+    ]);
+});

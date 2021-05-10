@@ -18,4 +18,9 @@ class User extends Model
     {
         return json_decode($this->token, true);
     }
+
+    public function hook()
+    {
+        return $this->hasOne(Hook::class);
+    }
 }
