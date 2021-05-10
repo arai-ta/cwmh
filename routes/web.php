@@ -93,9 +93,15 @@ $router->get('/config', function (Request $request, ChatWorkProvider $provider) 
 
     $accountId = $request->session()->get('account_id');
 
+    /** @var \App\Models\User $user */
     $user = \App\Models\User::query()->where('account_id', $accountId)->first();
 
-    $token = new \League\OAuth2\Client\Token\AccessToken($user->token);
+    if (!$user) {
+        $request->session()->forget('account_id');
+        return redirect('/');
+    }
+
+    $token = new \League\OAuth2\Client\Token\AccessToken($user->tokenAsArray());
 
     if ($token->hasExpired()) {
         $newToken = $provider->getAccessToken(new RefreshToken(), ['code' => $token->getRefreshToken()]);
