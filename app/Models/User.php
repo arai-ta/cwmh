@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use League\OAuth2\Client\Token\AccessToken;
 
 /**
  * @property string token
@@ -14,9 +15,15 @@ class User extends Model
         'token',
     ];
 
-    public function tokenAsArray(): array
+    public function getToken(): AccessToken
     {
-        return json_decode($this->token, true);
+        return new AccessToken(json_decode($this->token, true));
+    }
+
+    public function updateToken(AccessToken $token)
+    {
+        $this->token = $token->jsonSerialize();
+        $this->save();
     }
 
     public function hook()

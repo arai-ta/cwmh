@@ -6,4 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hook extends Model
 {
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

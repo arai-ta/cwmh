@@ -101,12 +101,10 @@ $router->get('/config', function (Request $request, ChatWorkProvider $provider) 
         return redirect('/');
     }
 
-    $token = new \League\OAuth2\Client\Token\AccessToken($user->tokenAsArray());
-
+    $token = $user->getToken();
     if ($token->hasExpired()) {
-        $newToken = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
-        $user->token = $newToken->jsonSerialize();
-        $user->save();
+        $token = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
+        $user->updateToken($token);
     }
 
     return view('config', [
@@ -127,12 +125,10 @@ $router->post('/config', function (Request $request, ChatWorkProvider $provider)
         return redirect('/');
     }
 
-    $token = new \League\OAuth2\Client\Token\AccessToken($user->tokenAsArray());
-
+    $token = $user->getToken();
     if ($token->hasExpired()) {
-        $newToken = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
-        $user->token = $newToken->jsonSerialize();
-        $user->save();
+        $token = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
+        $user->updateToken($token);
     }
 
     $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
@@ -151,4 +147,28 @@ $router->post('/config', function (Request $request, ChatWorkProvider $provider)
     $user->hook()->save($hook);
 
     return redirect('./config');
+});
+
+
+$router->get('/hook/{key}', function ($key, Request $request, ChatWorkProvider $provider) {
+    $hook = \App\Models\Hook::query()->where(['key' => $key])->first();
+    if (is_null($hook)) {
+        return 404;
+    }
+
+    $user = $hook->user;
+
+    $token = $user->getToken();
+    if ($token->hasExpired()) {
+        $token = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
+        $user->updateToken($token);
+    }
+
+    // 署名検証、失敗したら403
+
+    // メッセージの解析、投稿メッセージの組み立て
+
+    // 通知部屋にPOST
+
+    return "OK";
 });
