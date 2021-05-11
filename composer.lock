@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25f7bf1c1ddd01878e1bf0678256f752",
+    "content-hash": "c6edbb1dafa55a4a9504d5492ae314cf",
     "packages": [
         {
             "name": "brick/math",
@@ -3175,6 +3175,45 @@
                 }
             ],
             "time": "2020-08-18T17:17:46+00:00"
+        },
+        {
+            "name": "sun-asterisk/chatwork-php",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sun-asterisk-research/chatwork-php.git",
+                "reference": "ce72a291d1dd85347050682dc21c4752da240e23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sun-asterisk-research/chatwork-php/zipball/ce72a291d1dd85347050682dc21c4752da240e23",
+                "reference": "ce72a291d1dd85347050682dc21c4752da240e23",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "phpunit/phpunit": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SunAsterisk\\Chatwork\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Chatwork API PHP client library",
+            "support": {
+                "issues": "https://github.com/sun-asterisk-research/chatwork-php/issues",
+                "source": "https://github.com/sun-asterisk-research/chatwork-php/tree/v0.2.0"
+            },
+            "time": "2020-10-22T07:27:49+00:00"
         },
         {
             "name": "symfony/console",

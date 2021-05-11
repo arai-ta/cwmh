@@ -135,14 +135,20 @@ $router->post('/config', function (Request $request, ChatWorkProvider $provider)
         $user->save();
     }
 
-    $hook = new \App\Models\Hook([
-        // key
-        // target room id
+    $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
+    $result = $client->rooms()->create([
+        'name' => $request->input('roomname'),
+        'members_admin_ids' => [$user->account_id],
+        'description' => 'created by '.env('APP_NAME').'. at [date:'.time().']',
+        'link'  => 0,
+        'icon_preset' => 'check',
     ]);
-    $user->hook = $hook;
-    $user->save();
 
-    return view('config', [
-        'hook' => $user->hook
-    ]);
+    $hook = new \App\Models\Hook();
+    $hook->target_room_id = $result['room_id'];
+    $hook->key = strtr(base64_encode(random_bytes(24)), ['+' => '-', '/' => '_']);
+
+    $user->hook()->save($hook);
+
+    return redirect('./config');
 });

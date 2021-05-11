@@ -7,7 +7,8 @@
     "require": {
         "php": "^7.3|^8.0",
         "chatwork/oauth2-chatwork": "^0.1.2",
-        "laravel/lumen-framework": "^8.0"
+        "laravel/lumen-framework": "^8.0",
+        "sun-asterisk/chatwork-php": "^0.2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
