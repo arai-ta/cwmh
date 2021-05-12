@@ -23,6 +23,18 @@ $router->get('/', function () {
     return view('home');
 });
 
+$router->get('/test', function () {
+    phpinfo();
+
+    try {
+        \App\Models\User::query()->first();
+        return "OK";
+    } catch (Exception $e) {
+        var_dump($e);
+        return "NG";
+    }
+});
+
 $router->get('/start', function (Request $request, ChatWorkProvider $provider) {
 
     $url = $provider->getAuthorizationUrl([
