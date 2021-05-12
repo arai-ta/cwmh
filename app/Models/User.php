@@ -22,7 +22,7 @@ class User extends Model
 
     public function updateToken(AccessToken $token)
     {
-        $this->token = $token->jsonSerialize();
+        $this->token = json_encode($token->jsonSerialize());
         $this->save();
     }
 
