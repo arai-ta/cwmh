@@ -78,13 +78,14 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
 
     if ($user) {
         $user->token = $token->jsonSerialize();
-        $user->save();
     } else {
-        $user = \App\Models\User::save([
+        $user = new \App\Models\User([
             'account_id' => $accountId,
             'token' => $token->jsonSerialize(),
         ]);
     }
+
+    $user->save();
 
     return redirect('./config');
 });
