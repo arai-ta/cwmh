@@ -24,8 +24,6 @@ $router->get('/', function () {
 });
 
 $router->get('/test', function () {
-    phpinfo();
-
     try {
         \App\Models\User::query()->first();
         return "OK";
