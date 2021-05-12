@@ -9,8 +9,10 @@ return array_merge_recursive([
             'driver' => 'mysql',
             'url' => env('CLEARDB_DATABASE_URL'),
             'database' => env('DB_DATABASE', 'forge'),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'strict' => env('DB_STRICT_MODE', true),
+            'timezone' => env('DB_TIMEZONE', '+00:00'),
         ]
     ]
 ], $default);
