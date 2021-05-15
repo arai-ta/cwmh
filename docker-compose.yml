@@ -22,3 +22,5 @@ services:
       - --default-authentication-plugin=mysql_native_password
       - --general-log=true
       - --general-log-file=/tmp/mysql-query.log
+    volumes:
+      - ./storage/mysql:/var/lib/mysql
