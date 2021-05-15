@@ -11,7 +11,7 @@ class ServiceUrl
         $this->hostName = $hostName;
     }
 
-    public static function ofDefault(): self
+    public static function Chatwork(): self
     {
         return new self('www.chatwork.com');
     }
@@ -23,7 +23,7 @@ class ServiceUrl
 
     public static function create(bool $kddi = false): self
     {
-        return $kddi ? self::KDDIChatwork() : self::ofDefault();
+        return $kddi ? self::KDDIChatwork() : self::Chatwork();
     }
 
     public function roomLink(int $roomId): string
