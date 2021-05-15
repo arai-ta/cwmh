@@ -17,7 +17,7 @@ class AddKicksTable extends Migration
             $table->id();
             $table->foreignId('hook_id')->constrained();
             $table->string('result');
-            $table->text('detail');
+            $table->text('detail')->nullable();
             $table->timestamps();
         });
     }
