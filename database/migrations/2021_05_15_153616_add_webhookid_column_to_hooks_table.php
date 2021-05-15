@@ -14,7 +14,7 @@ class AddWebhookidColumnToHooksTable extends Migration
     public function up()
     {
         Schema::table('hooks', function (Blueprint $table) {
-            $table->integer('webhook_id');
+            $table->integer('webhook_id')->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class AddTokenColumnToHookTable extends Migration
     public function up()
     {
         Schema::table('hooks', function (Blueprint $table) {
-            $table->string('token', 50);
+            $table->string('token', 50)->nullable();
         });
     }
 
