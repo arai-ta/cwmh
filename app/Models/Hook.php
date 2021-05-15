@@ -10,4 +10,9 @@ class Hook extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getTargetRoomUrl(): string
+    {
+        return sprintf('https://www.chatwork.com/#!rid%s', $this->target_room_id);
+    }
 }

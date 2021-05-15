@@ -109,19 +109,12 @@ $router->get('/config', function (Request $request, ChatWorkProvider $provider) 
         return redirect('/');
     }
 
-    $token = $user->getToken();
-    if ($token->hasExpired()) {
-        $token = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
-        $user->updateToken($token);
-    }
-
     return view('config', [
         'hook' => $user->hook
     ]);
 });
 
-
-$router->post('/config', function (Request $request, ChatWorkProvider $provider) {
+$router->post('/setroom', function (Request $request, ChatWorkProvider $provider) {
 
     $accountId = $request->session()->get('account_id');
 
@@ -153,6 +146,26 @@ $router->post('/config', function (Request $request, ChatWorkProvider $provider)
     $hook->key = strtr(base64_encode(random_bytes(24)), ['+' => '-', '/' => '_']);
 
     $user->hook()->save($hook);
+
+    return redirect('./config');
+});
+
+$router->post('/setwebhook', function (Request $request, ChatWorkProvider $provider) {
+
+    $accountId = $request->session()->get('account_id');
+
+    /** @var \App\Models\User $user */
+    $user = \App\Models\User::query()->where('account_id', $accountId)->first();
+
+    if (!$user) {
+        $request->session()->forget('account_id');
+        return redirect('/');
+    }
+
+    $hook = $user->hook;
+    $hook->token = $request->input('webhooktoken');
+    $hook->webhook_id = $request->input('webhookid');
+    $hook->save();
 
     return redirect('./config');
 });
