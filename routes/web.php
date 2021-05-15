@@ -28,7 +28,7 @@ $router->get('/test', function () {
         \App\Models\User::query()->first();
         return "OK";
     } catch (Exception $e) {
-        var_dump($e);
+        var_dump($e->getMessage());
         return "NG";
     }
 });
@@ -162,6 +162,15 @@ $router->get('/hook/{key}', function ($key, Request $request, ChatWorkProvider $
     $hook = \App\Models\Hook::query()->where(['key' => $key])->first();
     if (is_null($hook)) {
         return 404;
+    } else {
+        return 200;
+    }
+});
+
+$router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider $provider) {
+    $hook = \App\Models\Hook::query()->where(['key' => $key])->first();
+    if (is_null($hook)) {
+        return 404;
     }
 
     $user = $hook->user;
@@ -171,6 +180,7 @@ $router->get('/hook/{key}', function ($key, Request $request, ChatWorkProvider $
         $token = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
         $user->updateToken($token);
     }
+    Log::info($request->getContent());
 
     // 署名検証、失敗したら403
 
@@ -179,4 +189,5 @@ $router->get('/hook/{key}', function ($key, Request $request, ChatWorkProvider $
     // 通知部屋にPOST
 
     return "OK";
+
 });

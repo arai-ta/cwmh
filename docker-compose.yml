@@ -15,7 +15,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: mention_history
-    # MySQL 8でデフォルト値が変更になり、PDOがまだ対応していないオプションを戻す
-    # https://www.php.net/manual/ja/ref.pdo-mysql.php
+    # (1) MySQL 8でデフォルト値が変更になり、PDOがまだ対応していないオプションを戻す
+    #     https://www.php.net/manual/ja/ref.pdo-mysql.php
     # https://hub.docker.com/_/mysql
-    command: --default-authentication-plugin=mysql_native_password
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --general-log=true
+      - --general-log-file=/tmp/mysql-query.log
