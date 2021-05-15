@@ -14,7 +14,7 @@
 @if ($hook)
     <p>通知を保存するチャットルームが作成されました。</p>
     <p><a href="{{$hook->getTargetRoomUrl()}}" target="_blank">Chatworkで確認する</a></p>
-    <p>変更する場合は以下を再度実施してください。</p>
+    <p>変更する場合、チャットルームを削除した場合などは以下を再度実施してください。</p>
 @else
     <p>通知を保存する専用のチャットルームを作成します。</p>
 @endif
@@ -57,7 +57,7 @@
     @if ($hook->webhook_id)
         <p>Webhook設定済みです。</p>
         <a href="https://www.chatwork.com/service/packages/chatwork/subpackages/webhook/modify.php?id={{$hook->webhook_id}}" target="_blank">Chatworkで設定を確認する</a>
-        <p>変更する場合は以下を再度実施してください。</p>
+        <p>変更する場合はステップ2から再実施してください。</p>
     @else
         <p>作成したWebhookの設定をここに記入してください。</p>
     @endif

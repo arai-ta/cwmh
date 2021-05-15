@@ -21,7 +21,7 @@ class NotifyRoomDescription
     {
         return new self(
             env('APP_NAME'),
-            url('./config'),
+            url('config', [], true),
             time()
         );
     }
@@ -30,10 +30,10 @@ class NotifyRoomDescription
     {
         return (new Message)
             ->infoStart("{$this->appName}")
-            ->text($this->appUrl)
+            ->line("設定: ".$this->appUrl)
+            ->text("作成: [date:{$this->createdTime}]")
             ->infoEnd()
-            ->line("ミュートしてピン留めすることを推奨します。")
-            ->line("[date:{$this->createdTime}] 作成");
+            ->text("ミュートしてピン留めすることを推奨します。");
     }
 
     public function __toString(): string
