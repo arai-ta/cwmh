@@ -181,9 +181,11 @@ $router->get('/hook/{key}', function ($key, Request $request, ChatWorkProvider $
 });
 
 $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider $provider) {
+
+    /** @var \App\Models\Hook $hook */
     $hook = \App\Models\Hook::query()->where(['key' => $key])->first();
     if (is_null($hook)) {
-        return 404;
+        return response("Not found", 404);
     }
 
     $user = $hook->user;
@@ -196,32 +198,39 @@ $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider 
         $user->updateToken($token);
     }
 
-    $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
-
-    // 署名検証、失敗したら403
-    if (\SunAsterisk\Chatwork\Helpers\Webhook::verifySignature(
-        $hook->token,
-        $request->getContent(),
-        $request->header('X-ChatWorkWebhookSignature')
-    )) {
-        // OK
-        $kick->result = "ok";
-    } else {
+    // 署名検証、失敗したら401
+    if (!$hook->isValidRequest($request)) {
         // NG
         $kick->result = 'invalid webhook signature';
         $kick->detail = json_encode([
             'sig' => $request->header('X-ChatWorkWebhookSignature'),
             'content' => $request->getContent(),
         ]);
+        $hook->kicks()->save($kick);
+        return response("Bad request", 401);
+    }
+
+    $event = \App\Chatwork\Webhook\MentionToMeEvent::fromJsonString($request->getContent());
+
+    $message = new \App\Chatwork\MessageTemplate\NotifyMessage($event, \App\Chatwork\ServiceUrl::ofDefault());
+
+    $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
+
+    try {
+        $result = $client->room($hook->target_room_id)->messages()->create($message);
+        $kick->result = "OK";
+        $kick->detail = json_encode($result);
+    } catch (\SunAsterisk\Chatwork\Exceptions\APIException $e) {
+        Log::error($e);
+        $kick->result = "API error"; // maybe 4xx
+        $kick->detail = (string) $e;
+    } catch (\Exception $e) {
+        Log::error($e);
+        $kick->result = "Unknown error"; // perhaps 5xx or timeout
+        $kick->detail = (string) $e;
     }
 
     $hook->kicks()->save($kick);
-
-    Log::info($request->getContent());
-
-    // メッセージの解析、投稿メッセージの組み立て
-
-    // 通知部屋にPOST
 
     return "OK";
 
