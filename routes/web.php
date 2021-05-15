@@ -21,7 +21,8 @@ use League\OAuth2\Client\Grant\RefreshToken;
 */
 
 $router->get('/', function () {
-    return view('home');
+    return view('home')
+        ->with('sourceUrl', env('APP_SOURCE_DIST_URL', 'https://github.com/arai-ta/cwmh'));
 });
 
 $router->get('/test', function () {
@@ -98,7 +99,7 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
     return redirect('./config');
 });
 
-$router->get('/config', function (Request $request, ChatWorkProvider $provider) {
+$router->get('/config', function (Request $request) {
 
     $accountId = $request->session()->get('account_id');
 
