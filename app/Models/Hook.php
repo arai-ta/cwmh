@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Chatwork\RoomLinkable;
+use App\Chatwork\WebhookSettingLinkable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use SunAsterisk\Chatwork\Helpers\Webhook;
 
-class Hook extends Model implements RoomLinkable
+class Hook extends Model implements RoomLinkable, WebhookSettingLinkable
 {
     public function user()
     {
@@ -19,14 +20,14 @@ class Hook extends Model implements RoomLinkable
         return $this->hasMany(Kick::class);
     }
 
-    public function getTargetRoomUrl(): string
-    {
-        return sprintf('https://www.chatwork.com/#!rid%s', $this->target_room_id);
-    }
-
     public function getRoomId(): int
     {
         return $this->target_room_id;
+    }
+
+    public function getWebhookId(): int
+    {
+        return $this->webhook_id;
     }
 
     public function isValidRequest(Request $request): bool

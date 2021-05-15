@@ -46,14 +46,29 @@ class ServiceUrl
         return $this->messageLink($linkable->getRoomId(), $linkable->getMessageId());
     }
 
+    public function webhookList(): string
+    {
+        return $this->getUrl('service/packages/chatwork/subpackages/webhook/list.php');
+    }
+
     public function webhookCreate(): string
     {
         return $this->getUrl('service/packages/chatwork/subpackages/webhook/create.php');
     }
 
-    public function webhookModify(int $id): string
+    public function webhookModify(WebhookSettingLinkable $linkable): string
     {
-        return $this->getUrl("service/packages/chatwork/subpackages/webhook/modify.php?id={$id}");
+        return $this->getUrl("service/packages/chatwork/subpackages/webhook/modify.php?id={$linkable->getWebhookId()}");
+    }
+
+    public function webhookDelete(WebhookSettingLinkable $linkable): string
+    {
+        return $this->getUrl("service/packages/chatwork/subpackages/webhook/delete.php?id={$linkable->getWebhookId()}");
+    }
+
+    public function oauthGrantedApps(): string
+    {
+        return $this->getUrl("service/packages/chatwork/subpackages/oauth/apps.php");
     }
 
     private function getUrl(...$path): string

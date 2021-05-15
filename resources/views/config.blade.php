@@ -13,7 +13,7 @@
     <h3>ステップ1</h3>
 @if ($hook)
     <p>通知を保存するチャットルームが作成されました。</p>
-    <p><a href="{{$hook->getTargetRoomUrl()}}" target="_blank">Chatworkで確認する</a></p>
+    <p><a href="{{$serviceUrl->toRoomLink($hook)}}" target="_blank">Chatworkで確認する</a></p>
     <p>変更する場合、チャットルームを削除した場合などは以下を再度実施してください。</p>
 @else
     <p>通知を保存する専用のチャットルームを作成します。</p>
@@ -25,7 +25,7 @@
 
     <h3>ステップ2</h3>
 @if (is_null($hook))
-    <p>ステップ1を実施してください。</p>
+    <p>先にステップ1を実施してください。</p>
 @else
     @if ($hook->webhook_id)
         <p>Webhook設定済みです。</p>
@@ -33,7 +33,7 @@
     @else
         <p>Chatworkのサービス連携でWebhookを新規作成してください。</p>
     @endif
-    <a href="https://www.chatwork.com/service/packages/chatwork/subpackages/webhook/create.php" target="_blank">Chatworkのサービス連携設定画面を開く</a>
+    <a href="{{$serviceUrl->webhookCreate()}}" target="_blank">Chatworkのサービス連携設定画面を開く</a>
     <p>設定値は次の通りにしてください。</p>
     <dl>
         <dt>Webhook名</dt>
@@ -52,14 +52,14 @@
 
     <h3>ステップ3</h3>
 @if (is_null($hook))
-    <p>ステップ1を実施してください。</p>
+    <p>先にステップ1を実施してください。</p>
 @else
     @if ($hook->webhook_id)
         <p>Webhook設定済みです。</p>
-        <a href="https://www.chatwork.com/service/packages/chatwork/subpackages/webhook/modify.php?id={{$hook->webhook_id}}" target="_blank">Chatworkで設定を確認する</a>
+        <a href="{{$serviceUrl->webhookModify($hook)}}" target="_blank">Chatworkで設定を確認する</a>
         <p>変更する場合はステップ2から再実施してください。</p>
     @else
-        <p>作成したWebhookの設定をここに記入してください。</p>
+        <p>Webhookの作成完了画面に表示される設定をここに記入してください。</p>
     @endif
     <form action="setwebhook" method="POST">
         <ul>
@@ -69,5 +69,29 @@
         <input type="submit" value="Webhook設定を保存する">
     </form>
 @endif
+
+<h2>状態</h2>
+    <h3>設定状況</h3>
+    <ul>
+        <li>通知先チャットルーム：{{isset($hook) ? "作成済" : "未作成"}}</li>
+        <li>Webhook設定：{{isset($hook->token) ? "設定済" : "未設定"}}</li>
+    </ul>
+
+    <h3>利用状況</h3>
+    <ul>
+        <li>通知記録回数：{{$totalKicks}}</li>
+        <li>最後の通知日時：{{$lastKick->created_at ?? "未実行"}}</li>
+        <li>最後の通知結果：{{$lastKick->result ?? "未実行"}}</li>
+    </ul>
+
+<h2>データの削除</h2>
+    <p>このアプリの利用を止めるには、次の手順で連携を解除してください。</p>
+
+    <ol>
+        @if (isset($hook->webhook_id))
+        <li>Webhookの設定を削除してください。（<a href="{{$serviceUrl->webhookDelete($hook)}}" target="_blank">Chatworkで開く</a>）</li>
+        @endif
+        <li>OAuth認証サービスの一覧からこのアプリの権限を削除してください。（<a href="{{$serviceUrl->oauthGrantedApps()}}" target="_blank">Chatworkで開く</a>）</li>
+    </ol>
 
 </x-layout>

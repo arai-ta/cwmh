@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Chatwork\ServiceUrl;
 use Illuminate\Database\Eloquent\Model;
 use League\OAuth2\Client\Token\AccessToken;
 
@@ -24,6 +25,11 @@ class User extends Model
     {
         $this->token = json_encode($token->jsonSerialize());
         $this->save();
+    }
+
+    public function getServiceUrl(): ServiceUrl
+    {
+        return ServiceUrl::create(); // 後でKCWと切り替えるフラグを渡す
     }
 
     public function hook()

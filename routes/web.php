@@ -2,6 +2,7 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Models\Hook;
 use ChatWork\OAuth2\Client\ChatWorkProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -109,8 +110,14 @@ $router->get('/config', function (Request $request, ChatWorkProvider $provider) 
         return redirect('/');
     }
 
+    /** @var Hook $hook */
+    $hook = $user->hook;
+
     return view('config', [
-        'hook' => $user->hook
+        'hook' => $hook,
+        'serviceUrl' => $user->getServiceUrl(),
+        'lastKick' => $hook ? $hook->kicks()->latest()->first() : null,
+        'totalKicks' => $hook ? $hook->kicks()->count() : 0,
     ]);
 });
 
@@ -212,7 +219,7 @@ $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider 
 
     $event = \App\Chatwork\Webhook\MentionToMeEvent::fromJsonString($request->getContent());
 
-    $message = new \App\Chatwork\MessageTemplate\NotifyMessage($event, \App\Chatwork\ServiceUrl::ofDefault());
+    $message = new \App\Chatwork\MessageTemplate\NotifyMessage($event, $user->getServiceUrl());
 
     $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
 
