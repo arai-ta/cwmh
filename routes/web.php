@@ -188,14 +188,36 @@ $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider 
 
     $user = $hook->user;
 
+    $kick = new \App\Models\Kick();
+
     $token = $user->getToken();
     if ($token->hasExpired()) {
         $token = $provider->getAccessToken(new RefreshToken(), ['refresh_token' => $token->getRefreshToken()]);
         $user->updateToken($token);
     }
-    Log::info($request->getContent());
+
+    $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
 
     // 署名検証、失敗したら403
+    if (\SunAsterisk\Chatwork\Helpers\Webhook::verifySignature(
+        $hook->token,
+        $request->getContent(),
+        $request->header('X-ChatWorkWebhookSignature')
+    )) {
+        // OK
+        $kick->result = "ok";
+    } else {
+        // NG
+        $kick->result = 'invalid webhook signature';
+        $kick->detail = json_encode([
+            'sig' => $request->header('X-ChatWorkWebhookSignature'),
+            'content' => $request->getContent(),
+        ]);
+    }
+
+    $hook->kicks()->save($kick);
+
+    Log::info($request->getContent());
 
     // メッセージの解析、投稿メッセージの組み立て
 
