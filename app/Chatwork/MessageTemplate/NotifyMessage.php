@@ -23,7 +23,7 @@ class NotifyMessage
     public function render(): string
     {
         return (new Message)
-            ->infoStart($this->title())
+            ->infoStart("{$this->event->triggerAction} by [piconname:{$this->event->fromAccountId}]")
             ->text($this->url->toMessageLink($this->event))
             ->infoEnd();
     }
@@ -31,12 +31,5 @@ class NotifyMessage
     public function __toString(): string
     {
         return $this->render();
-    }
-
-    private function title(): string
-    {
-        return <<<EOT
-[piconname:{$this->event->fromAccountId}] -> [piconname:{$this->event->toAccountId}] {$this->event->triggerAction}
-EOT;
     }
 }

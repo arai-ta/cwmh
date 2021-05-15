@@ -80,7 +80,7 @@ class MentionToMeEvent implements MessageLinkable
         } elseif (stripos($body, "[rp aid={$this->toAccountId}") !== false) {
             $this->triggerAction = "🔙 REPLY";
         } elseif (stripos($body, "[task aid={$this->toAccountId}") !== false) {
-            $this->triggerAction = "📝 TASK";
+            $this->triggerAction = "📝 TASK"; // will not fire currently
         } elseif (stripos($body, "[toall]") !== false) {
             $this->triggerAction = "📣️ TOALL";
         } else {
