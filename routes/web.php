@@ -136,7 +136,7 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
     $result = $client->rooms()->create([
         'name' => $request->input('roomname'),
         'members_admin_ids' => [$user->account_id],
-        'description' => 'created by '.env('APP_NAME').'. at [date:'.time().']',
+        'description' => \App\Chatwork\MessageTemplate\NotifyRoomDescription::create()->render(),
         'link'  => 0,
         'icon_preset' => 'check',
     ]);
