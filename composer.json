@@ -1,8 +1,8 @@
 {
-    "name": "laravel/lumen",
-    "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
-    "license": "MIT",
+    "name": "arai-ta/cwmh",
+    "description": "Chatwork mention history stocker",
+    "keywords": ["chatwork", "oauth2", "webhook"],
+    "license": "AGPL-3.0-or-later",
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
@@ -36,9 +36,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "serve": [
-            "php -S localhost:8000 -t public"
-        ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]
