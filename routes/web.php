@@ -20,10 +20,7 @@ use League\OAuth2\Client\Grant\RefreshToken;
 |
 */
 
-$router->get('/', function () {
-    return view('home')
-        ->with('sourceUrl', env('APP_SOURCE_DIST_URL', 'https://github.com/arai-ta/cwmh'));
-});
+$router->get('/', 'HomeController');
 
 $router->get('/test', function () {
     try {
