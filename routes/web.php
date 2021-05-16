@@ -6,7 +6,6 @@ use App\Models\Hook;
 use ChatWork\OAuth2\Client\ChatWorkProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use League\OAuth2\Client\Grant\AuthorizationCode;
 use League\OAuth2\Client\Grant\RefreshToken;
 
 /*
@@ -24,49 +23,7 @@ $router->get('/', 'HomeController');
 
 $router->get('/start', 'StartController');
 
-$router->get('/callback', function (Request $request, ChatWorkProvider $provider) {
-    $state = $request->session()->get('state');
-
-    if ($state !== $request->input('state')) {
-        Log::error("invalid state error. session = {$state}, request = {$request->input('state')}");
-        return view("error", [
-            'message' => "invalid state error"
-        ]);
-    }
-
-    if ($request->input('error', false)) {
-        return view("error", [
-            'message' => "service linkage error:".$request->input('error')
-        ]);
-    }
-
-    try {
-        $token = $provider->getAccessToken(new AuthorizationCode(), ['code' => $request->input('code')]);
-    } catch (League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
-        return view("error", [
-            'message' => "service linkage error:".$e->getMessage()
-        ]);
-    }
-
-    $owner = $provider->getResourceOwner($token);
-
-    $accountId = $owner->getId();
-    $request->session()->put('account_id', $accountId);
-
-    $user = \App\Models\User::query()
-        ->where('account_id', $accountId)
-        ->first();
-
-    if (!$user) {
-        $user = new \App\Models\User([
-            'account_id' => $accountId,
-        ]);
-    }
-
-    $user->updateToken($token);
-
-    return redirect('./config');
-});
+$router->get('/callback', 'CallbackController');
 
 $router->get('/config', function (Request $request) {
 
