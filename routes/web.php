@@ -22,35 +22,7 @@ use League\OAuth2\Client\Grant\RefreshToken;
 
 $router->get('/', 'HomeController');
 
-$router->get('/test', function () {
-    try {
-        \App\Models\User::query()->first();
-        return "OK";
-    } catch (Exception $e) {
-        var_dump($e->getMessage());
-        return "NG";
-    }
-});
-
-$router->get('/start', function (Request $request, ChatWorkProvider $provider) {
-
-    $url = $provider->getAuthorizationUrl([
-        'scope' => [
-            'users.profile.me:read',
-            'rooms:write',
-            'rooms.messages:write',
-            'offline_access',
-        ]
-    ]);
-
-    $state = $provider->getState();
-
-    Log::info("state = {$state}, url = {$url}");
-
-    $request->session()->put('state', $state);
-
-    return redirect($url);
-});
+$router->get('/start', 'StartController');
 
 $router->get('/callback', function (Request $request, ChatWorkProvider $provider) {
     $state = $request->session()->get('state');
