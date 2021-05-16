@@ -3,6 +3,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 use App\Models\Hook;
+use App\Models\User;
 use ChatWork\OAuth2\Client\ChatWorkProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -25,16 +26,6 @@ $router->get('/', function () {
         ->with('sourceUrl', env('APP_SOURCE_DIST_URL', 'https://github.com/arai-ta/cwmh'));
 });
 
-$router->get('/test', function () {
-    try {
-        \App\Models\User::query()->first();
-        return "OK";
-    } catch (Exception $e) {
-        var_dump($e->getMessage());
-        return "NG";
-    }
-});
-
 $router->get('/start', function (Request $request, ChatWorkProvider $provider) {
 
     $url = $provider->getAuthorizationUrl([
@@ -46,11 +37,7 @@ $router->get('/start', function (Request $request, ChatWorkProvider $provider) {
         ]
     ]);
 
-    $state = $provider->getState();
-
-    Log::info("state = {$state}, url = {$url}");
-
-    $request->session()->put('state', $state);
+    $request->session()->put('state', $provider->getState());
 
     return redirect($url);
 });
@@ -59,7 +46,6 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
     $state = $request->session()->get('state');
 
     if ($state !== $request->input('state')) {
-        Log::error("invalid state error. session = {$state}, request = {$request->input('state')}");
         return view("error", [
             'message' => "invalid state error"
         ]);
@@ -79,21 +65,10 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
         ]);
     }
 
-    $owner = $provider->getResourceOwner($token);
+    $id = $provider->getResourceOwner($token)->getId();
+    $request->session()->put('account_id', $id);
 
-    $accountId = $owner->getId();
-    $request->session()->put('account_id', $accountId);
-
-    $user = \App\Models\User::query()
-        ->where('account_id', $accountId)
-        ->first();
-
-    if (!$user) {
-        $user = new \App\Models\User([
-            'account_id' => $accountId,
-        ]);
-    }
-
+    $user = User::firstOrNew(['account_id' => $id]);
     $user->updateToken($token);
 
     return redirect('./config');
@@ -103,8 +78,8 @@ $router->get('/config', function (Request $request) {
 
     $accountId = $request->session()->get('account_id');
 
-    /** @var \App\Models\User $user */
-    $user = \App\Models\User::query()->where('account_id', $accountId)->first();
+    /** @var User $user */
+    $user = User::query()->where('account_id', $accountId)->first();
 
     if (!$user) {
         $request->session()->forget('account_id');
@@ -126,8 +101,8 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
 
     $accountId = $request->session()->get('account_id');
 
-    /** @var \App\Models\User $user */
-    $user = \App\Models\User::query()->where('account_id', $accountId)->first();
+    /** @var User $user */
+    $user = User::query()->where('account_id', $accountId)->first();
 
     if (!$user) {
         $request->session()->forget('account_id');
@@ -162,8 +137,8 @@ $router->post('/setwebhook', function (Request $request, ChatWorkProvider $provi
 
     $accountId = $request->session()->get('account_id');
 
-    /** @var \App\Models\User $user */
-    $user = \App\Models\User::query()->where('account_id', $accountId)->first();
+    /** @var User $user */
+    $user = User::query()->where('account_id', $accountId)->first();
 
     if (!$user) {
         $request->session()->forget('account_id');
@@ -176,16 +151,6 @@ $router->post('/setwebhook', function (Request $request, ChatWorkProvider $provi
     $hook->save();
 
     return redirect('./config');
-});
-
-
-$router->get('/hook/{key}', function ($key, Request $request, ChatWorkProvider $provider) {
-    $hook = \App\Models\Hook::query()->where(['key' => $key])->first();
-    if (is_null($hook)) {
-        return 404;
-    } else {
-        return 200;
-    }
 });
 
 $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider $provider) {
