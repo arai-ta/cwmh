@@ -105,6 +105,11 @@ $router->get('/config', function (Request $request) {
     ]);
 });
 
+$router->get('/logout', function (Request $request) {
+    $request->session()->forget('account_id');
+    return new RedirectResponse('/');
+});
+
 $router->post('/setroom', function (Request $request, ChatWorkProvider $provider) {
 
     $accountId = $request->session()->get('account_id');

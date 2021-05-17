@@ -14,7 +14,7 @@
 @if ($hook)
     <p>通知を保存するチャットルームが作成されました。</p>
     <p><a href="{{$serviceUrl->toRoomLink($hook)}}" target="_blank">Chatworkで確認する</a></p>
-    <p>変更する場合、チャットルームを削除した場合などは以下を再度実施してください。</p>
+    <p>チャットルームにアクセスできない場合などは以下から再作成してください。</p>
 @else
     <p>通知を保存する専用のチャットルームを作成します。</p>
 @endif
@@ -84,14 +84,18 @@
         <li>最後の通知結果：{{$lastKick->result ?? "未実行"}}</li>
     </ul>
 
-<h2>データの削除</h2>
+<h2>利用停止</h2>
+    <p><a href="logout">ログアウトはこちらから。</a></p>
     <p>このアプリの利用を止めるには、次の手順で連携を解除してください。</p>
 
     <ol>
         @if (isset($hook->webhook_id))
         <li>Webhookの設定を削除してください。（<a href="{{$serviceUrl->webhookDelete($hook)}}" target="_blank">Chatworkで開く</a>）</li>
+        @else
+        <li>Webhookの設定があれば削除してください。（<a href="{{$serviceUrl->webhookList()}}" target="_blank">Chatworkで開く</a>）</li>
         @endif
         <li>OAuth認証サービスの一覧からこのアプリの権限を削除してください。（<a href="{{$serviceUrl->oauthGrantedApps()}}" target="_blank">Chatworkで開く</a>）</li>
+        <li>通知先のチャットルームを削除してください。(<a href="{{$serviceUrl->toRoomLink($hook)}}" target="_blank">Chatworkで確認する</a>)</li>
     </ol>
 
 </x-layout>
