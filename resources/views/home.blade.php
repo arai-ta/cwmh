@@ -31,6 +31,8 @@
     <dd>このアプリを永続的に動かすために必要です。</dd>
     <dt>自分のプロフィール情報の取得 (<code>users.profile.me:read</code>)</dt>
     <dd>個別のアカウント情報を識別するために必要です。</dd>
+    <dt>自分が参加しているチャットルーム一覧の取得 (<code>rooms.info:read</code>)</dt>
+    <dd>通知されたチャットルーム名を取得するために必要です。</dd>
     <dt>チャットルームの作成と参加しているチャットルームの削除 (<code>rooms:write</code>)</dt>
     <dd>通知先のチャットルーム作成のために必要です。削除はしません。</dd>
     <dt>自分が参加しているチャットルームへのメッセージ投稿 (<code>rooms.messages:write</code>)</dt>

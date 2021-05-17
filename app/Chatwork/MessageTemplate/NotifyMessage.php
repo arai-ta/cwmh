@@ -14,18 +14,29 @@ class NotifyMessage
     /** @var ServiceUrl */
     private $url;
 
-    public function __construct(MentionToMeEvent $event, ServiceUrl $url)
+    /** @var string */
+    private $roomName;
+
+    public function __construct(MentionToMeEvent $event, ServiceUrl $url, string $roomName)
     {
-        $this->event = $event;
-        $this->url = $url;
+        $this->event    = $event;
+        $this->url      = $url;
+        $this->roomName = $roomName;
     }
 
     public function render(): string
     {
         return (new Message)
-            ->infoStart("{$this->event->triggerAction} by [piconname:{$this->event->fromAccountId}]")
+            ->infoStart($this->title())
             ->text($this->url->toMessageLink($this->event))
             ->infoEnd();
+    }
+
+    private function title(): string
+    {
+        return <<<EOT
+{$this->event->triggerAction} by [piconname:{$this->event->fromAccountId}] @ {$this->roomName}
+EOT;
     }
 
     public function __toString(): string

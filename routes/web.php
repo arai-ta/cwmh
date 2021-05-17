@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Chatwork\MessageTemplate\NotifyMessage;
+use App\Chatwork\Webhook\MentionToMeEvent;
 use App\Models\Hook;
 use App\Models\User;
 use ChatWork\OAuth2\Client\ChatWorkProvider;
@@ -10,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Grant\AuthorizationCode;
 use League\OAuth2\Client\Grant\RefreshToken;
+use SunAsterisk\Chatwork\Chatwork;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +35,7 @@ $router->get('/start', function (Request $request, ChatWorkProvider $provider) {
     $url = $provider->getAuthorizationUrl([
         'scope' => [
             'users.profile.me:read',
+            'rooms.info:read',
             'rooms:write',
             'rooms.messages:write',
             'offline_access',
@@ -116,7 +120,7 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
         $user->updateToken($token);
     }
 
-    $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
+    $client = Chatwork::withAccessToken($token->getToken());
     $result = $client->rooms()->create([
         'name' => $request->input('roomname'),
         'members_admin_ids' => [$user->account_id],
@@ -184,14 +188,16 @@ $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider 
         return response("Bad request", 401);
     }
 
-    $event = \App\Chatwork\Webhook\MentionToMeEvent::fromJsonString($request->getContent());
-
-    $message = new \App\Chatwork\MessageTemplate\NotifyMessage($event, $user->getServiceUrl());
-
-    $client = \SunAsterisk\Chatwork\Chatwork::withAccessToken($token->getToken());
+    $event  = MentionToMeEvent::fromJsonString($request->getContent());
+    $client = Chatwork::withAccessToken($token->getToken());
 
     try {
-        $result = $client->room($hook->target_room_id)->messages()->create($message);
+        $roomName = $client->room($event->roomId)->detail()['name'];
+
+        $result = $client->room($hook->target_room_id)->messages()->create(
+            new NotifyMessage($event, $user->getServiceUrl(), $roomName)
+        );
+
         $kick->result = "OK";
         $kick->detail = json_encode($result);
     } catch (\SunAsterisk\Chatwork\Exceptions\APIException $e) {
