@@ -5,6 +5,7 @@
 use App\Models\Hook;
 use App\Models\User;
 use ChatWork\OAuth2\Client\ChatWorkProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Grant\AuthorizationCode;
@@ -39,7 +40,7 @@ $router->get('/start', function (Request $request, ChatWorkProvider $provider) {
 
     $request->session()->put('state', $provider->getState());
 
-    return redirect($url);
+    return new RedirectResponse($url);
 });
 
 $router->get('/callback', function (Request $request, ChatWorkProvider $provider) {
@@ -71,7 +72,7 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
     $user = User::firstOrNew(['account_id' => $id]);
     $user->updateToken($token);
 
-    return redirect('./config');
+    return new RedirectResponse('./config');
 });
 
 $router->get('/config', function (Request $request) {
@@ -83,7 +84,7 @@ $router->get('/config', function (Request $request) {
 
     if (!$user) {
         $request->session()->forget('account_id');
-        return redirect('/');
+        return new RedirectResponse('/');
     }
 
     /** @var Hook $hook */
@@ -106,7 +107,7 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
 
     if (!$user) {
         $request->session()->forget('account_id');
-        return redirect('/');
+        return new RedirectResponse('/');
     }
 
     $token = $user->getToken();
@@ -130,7 +131,7 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
 
     $user->hook()->save($hook);
 
-    return redirect('./config');
+    return new RedirectResponse('/config');
 });
 
 $router->post('/setwebhook', function (Request $request, ChatWorkProvider $provider) {
@@ -142,7 +143,7 @@ $router->post('/setwebhook', function (Request $request, ChatWorkProvider $provi
 
     if (!$user) {
         $request->session()->forget('account_id');
-        return redirect('/');
+        return new RedirectResponse('/');
     }
 
     $hook = $user->hook;
@@ -150,7 +151,7 @@ $router->post('/setwebhook', function (Request $request, ChatWorkProvider $provi
     $hook->webhook_id = $request->input('webhookid');
     $hook->save();
 
-    return redirect('./config');
+    return new RedirectResponse('/config');
 });
 
 $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider $provider) {
