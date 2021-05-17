@@ -141,7 +141,7 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
     return new RedirectResponse('/config');
 });
 
-$router->post('/setwebhook', function (Request $request, ChatWorkProvider $provider) {
+$router->post('/setwebhook', function (Request $request) {
 
     $accountId = $request->session()->get('account_id');
 
