@@ -3,8 +3,10 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 use App\Chatwork\MessageTemplate\NotifyMessage;
+use App\Chatwork\MessageTemplate\NotifyRoomDescription;
 use App\Chatwork\Webhook\MentionToMeEvent;
 use App\Models\Hook;
+use App\Models\Kick;
 use App\Models\User;
 use ChatWork\OAuth2\Client\ChatWorkProvider;
 use Illuminate\Http\RedirectResponse;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Grant\AuthorizationCode;
 use League\OAuth2\Client\Grant\RefreshToken;
 use SunAsterisk\Chatwork\Chatwork;
+use SunAsterisk\Chatwork\Exceptions\APIException;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,12 +127,12 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
     $result = $client->rooms()->create([
         'name' => $request->input('roomname'),
         'members_admin_ids' => [$user->account_id],
-        'description' => \App\Chatwork\MessageTemplate\NotifyRoomDescription::create()->render(),
+        'description' => NotifyRoomDescription::create()->render(),
         'link'  => 0,
         'icon_preset' => 'check',
     ]);
 
-    $hook = new \App\Models\Hook();
+    $hook = new Hook();
     $hook->target_room_id = $result['room_id'];
     $hook->key = strtr(base64_encode(random_bytes(24)), ['+' => '-', '/' => '_']);
 
@@ -160,15 +163,15 @@ $router->post('/setwebhook', function (Request $request, ChatWorkProvider $provi
 
 $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider $provider) {
 
-    /** @var \App\Models\Hook $hook */
-    $hook = \App\Models\Hook::query()->where(['key' => $key])->first();
+    /** @var Hook $hook */
+    $hook = Hook::query()->where(['key' => $key])->first();
     if (is_null($hook)) {
         return response("Not found", 404);
     }
 
     $user = $hook->user;
 
-    $kick = new \App\Models\Kick();
+    $kick = new Kick();
 
     $token = $user->getToken();
     if ($token->hasExpired()) {
@@ -200,7 +203,7 @@ $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider 
 
         $kick->result = "OK";
         $kick->detail = json_encode($result);
-    } catch (\SunAsterisk\Chatwork\Exceptions\APIException $e) {
+    } catch (APIException $e) {
         Log::error($e);
         $kick->result = "API error"; // maybe 4xx
         $kick->detail = (string) $e;
