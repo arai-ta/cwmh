@@ -18,12 +18,12 @@ class User extends Model
 
     public function getToken(): AccessToken
     {
-        return new AccessToken(json_decode($this->token, true));
+        return new AccessToken(json_decode(decrypt($this->token), true));
     }
 
     public function updateToken(AccessToken $token)
     {
-        $this->token = json_encode($token->jsonSerialize());
+        $this->token = encrypt(json_encode($token));
         $this->save();
     }
 
