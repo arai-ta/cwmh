@@ -95,7 +95,9 @@
         <li>Webhookの設定があれば削除してください。（<a href="{{$serviceUrl->webhookList()}}" target="_blank">Chatworkで開く</a>）</li>
         @endif
         <li>OAuth認証サービスの一覧からこのアプリの権限を削除してください。（<a href="{{$serviceUrl->oauthGrantedApps()}}" target="_blank">Chatworkで開く</a>）</li>
+        @if (isset($hook))
         <li>通知先のチャットルームを削除してください。(<a href="{{$serviceUrl->toRoomLink($hook)}}" target="_blank">Chatworkで確認する</a>)</li>
+        @endif
     </ol>
 
 </x-layout>
