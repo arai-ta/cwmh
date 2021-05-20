@@ -40,6 +40,11 @@ return [
             'channels' => ['daily', 'stdout'],
         ],
 
+        'heroku' => [
+            'driver' => 'stack',
+            'channels' => ['stdout', 'chatwork'],
+        ],
+
         'stdout' => [
             'driver' => 'monolog',
             'handler' => StreamHandler::class,
@@ -47,6 +52,14 @@ return [
                 'stream' => 'php://stdout',
             ],
             'level' => env('LOG_LEVEL', 'debug')
+        ],
+
+        'chatwork' => [
+            'driver' => 'custom',
+            'via'    => Revolution\Laravel\Logger\ChatWork\ChatWorkLogger::class,
+            'token'  => env('CHATWORK_LOGGER_TOKEN'),
+            'room'   => env('CHATWORK_LOGGER_ROOM'),
+            'level'  => 'error',
         ],
 
         'daily' => [
