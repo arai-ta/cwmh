@@ -59,7 +59,7 @@ return [
             'via'    => Revolution\Laravel\Logger\ChatWork\ChatWorkLogger::class,
             'token'  => env('CHATWORK_LOGGER_TOKEN'),
             'room'   => env('CHATWORK_LOGGER_ROOM'),
-            'level'  => 'error',
+            'level'  => env('CHATWORK_LOGGER_LEVEL', 'error'),
         ],
 
         'daily' => [
