@@ -76,6 +76,7 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
     $id = $provider->getResourceOwner($token)->getId();
     $request->session()->put('account_id', $id);
 
+    /** @var User $user */
     $user = User::firstOrNew(['account_id' => $id]);
     $user->updateToken($token);
 
@@ -94,7 +95,6 @@ $router->get('/config', function (Request $request) {
         return new RedirectResponse('/');
     }
 
-    /** @var Hook $hook */
     $hook = $user->hook;
 
     return view('config', [
@@ -138,8 +138,8 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
     ]);
 
     $hook = new Hook();
-    $hook->target_room_id = $result['room_id'];
-    $hook->key = strtr(base64_encode(random_bytes(24)), ['+' => '-', '/' => '_']);
+    $hook->setRoomId($result['room_id']);
+    $hook->generateKey();
 
     $user->hook()->save($hook);
 

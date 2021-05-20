@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use SunAsterisk\Chatwork\Helpers\Webhook;
 
+
+/**
+ * @property User $user
+ * @property string $key
+ * @property string $token
+ * @property int $webhook_id
+ *
+ * @property string $target_room_id
+ */
 class Hook extends Model implements RoomLinkable, WebhookSettingLinkable
 {
     public function user()
@@ -25,9 +34,19 @@ class Hook extends Model implements RoomLinkable, WebhookSettingLinkable
         return $this->target_room_id;
     }
 
+    public function setRoomId(int $id)
+    {
+        $this->target_room_id = $id;
+    }
+
     public function getWebhookId(): int
     {
         return $this->webhook_id;
+    }
+
+    public function generateKey()
+    {
+        $this->key = strtr(base64_encode(random_bytes(24)), ['+' => '-', '/' => '_']);
     }
 
     public function isValidRequest(Request $request): bool

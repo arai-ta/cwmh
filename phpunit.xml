@@ -5,6 +5,9 @@
          colors="true"
 >
     <testsuites>
+        <testsuite name="Unit Test Suite">
+            <directory suffix="Test.php">./app</directory>
+        </testsuite>
         <testsuite name="Application Test Suite">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
@@ -12,6 +15,7 @@
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
+        <env name="DB_CONNECTION" value="testing_sqlite"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
     </php>
 </phpunit>

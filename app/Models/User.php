@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use League\OAuth2\Client\Token\AccessToken;
 
 /**
+ * @property Hook $hook
+ * @property int $account_id
+ *
  * @property string token
  */
 class User extends Model
@@ -18,12 +21,12 @@ class User extends Model
 
     public function getToken(): AccessToken
     {
-        return new AccessToken(json_decode($this->token, true));
+        return new AccessToken(json_decode(decrypt($this->token), true));
     }
 
     public function updateToken(AccessToken $token)
     {
-        $this->token = json_encode($token->jsonSerialize());
+        $this->token = encrypt(json_encode($token));
         $this->save();
     }
 
