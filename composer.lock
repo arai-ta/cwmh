@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c83df6d76e7af40653c5f27ef60161fb",
+    "content-hash": "3bf18d51fbc48670d4938552b5c74654",
     "packages": [
         {
             "name": "brick/math",
@@ -3171,6 +3171,53 @@
                 }
             ],
             "time": "2020-08-18T17:17:46+00:00"
+        },
+        {
+            "name": "revolution/laravel-logger-chatwork",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/arai-ta/laravel-logger-chatwork.git",
+                "reference": "17a5fccb80909c222e00de199fd334da03de89f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/arai-ta/laravel-logger-chatwork/zipball/17a5fccb80909c222e00de199fd334da03de89f5",
+                "reference": "17a5fccb80909c222e00de199fd334da03de89f5",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3||^7.0",
+                "illuminate/support": "*",
+                "monolog/monolog": "*",
+                "php": "^7.2||^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Revolution\\Laravel\\Logger\\ChatWork\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "kawax",
+                    "email": "kawaxbiz@gmail.com"
+                }
+            ],
+            "description": "ChatWork channel for Laravel Log",
+            "keywords": [
+                "chatwork",
+                "laravel",
+                "log"
+            ],
+            "support": {
+                "source": "https://github.com/arai-ta/laravel-logger-chatwork/tree/master"
+            },
+            "time": "2021-05-20T19:39:18+00:00"
         },
         {
             "name": "sun-asterisk/chatwork-php",
@@ -7923,7 +7970,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "revolution/laravel-logger-chatwork": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

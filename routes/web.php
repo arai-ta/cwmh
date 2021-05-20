@@ -29,6 +29,7 @@ use SunAsterisk\Chatwork\Exceptions\APIException;
 */
 
 $router->get('/', function () {
+    Log::debug('It works!');
     return view('home')
         ->with('sourceUrl', env('APP_SOURCE_DIST_URL', 'https://github.com/arai-ta/cwmh'));
 });
@@ -212,7 +213,7 @@ $router->post('/hook/{key}', function ($key, Request $request, ChatWorkProvider 
         Log::error($e);
         $kick->result = "API error"; // maybe 4xx
         $kick->detail = (string) $e;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         Log::error($e);
         $kick->result = "Unknown error"; // perhaps 5xx or timeout
         $kick->detail = (string) $e;

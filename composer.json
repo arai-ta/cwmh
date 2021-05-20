@@ -6,10 +6,11 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
         "chatwork/oauth2-chatwork": "^0.1.2",
         "laravel/lumen-framework": "^8.0",
-        "sun-asterisk/chatwork-php": "^0.2.0",
-        "ext-json": "*"
+        "revolution/laravel-logger-chatwork": "dev-master",
+        "sun-asterisk/chatwork-php": "^0.2.0"
     },
     "require-dev": {
         "doctrine/dbal": "^3.1",
@@ -40,5 +41,11 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]
+    },
+    "repositories": {
+        "revolution/laravel-logger-chatwork": {
+            "type": "vcs",
+            "url": "https://github.com/arai-ta/laravel-logger-chatwork"
+        }
     }
 }
