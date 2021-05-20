@@ -138,8 +138,8 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
     ]);
 
     $hook = new Hook();
-    $hook->target_room_id = $result['room_id'];
-    $hook->key = strtr(base64_encode(random_bytes(24)), ['+' => '-', '/' => '_']);
+    $hook->setRoomId($result['room_id']);
+    $hook->generateKey();
 
     $user->hook()->save($hook);
 
