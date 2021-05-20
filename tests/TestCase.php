@@ -13,4 +13,11 @@ abstract class TestCase extends BaseTestCase
     {
         return require __DIR__.'/../bootstrap/app.php';
     }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        //$this->artisan('migrate');
+    }
 }

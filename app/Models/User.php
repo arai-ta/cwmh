@@ -21,6 +21,7 @@ class User extends Model
 
     public function getToken(): AccessToken
     {
+        return new AccessToken(['access_token' => 123]);
         return new AccessToken(json_decode(decrypt($this->token), true));
     }
 
