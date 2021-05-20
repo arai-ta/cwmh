@@ -29,7 +29,7 @@ use SunAsterisk\Chatwork\Exceptions\APIException;
 */
 
 $router->get('/', function () {
-    Log::debug('It works!');
+    Log::error('It works!');
     return view('home')
         ->with('sourceUrl', env('APP_SOURCE_DIST_URL', 'https://github.com/arai-ta/cwmh'));
 });
