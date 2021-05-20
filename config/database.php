@@ -61,6 +61,11 @@ return [
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
             'strict'    => env('DB_STRICT_MODE', true),
             'timezone'  => env('DB_TIMEZONE', '+00:00'),
+        ],
+
+        'testing_sqlite' => [
+            'driver'    => 'sqlite',
+            'database'  => ':memory:',
         ]
     ],
 

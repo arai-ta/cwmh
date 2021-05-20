@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use League\OAuth2\Client\Token\AccessToken;
 
 /**
+ * @property Hook $hook
+ * @property int $account_id
+ *
  * @property string token
  */
 class User extends Model

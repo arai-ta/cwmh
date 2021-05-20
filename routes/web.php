@@ -76,6 +76,7 @@ $router->get('/callback', function (Request $request, ChatWorkProvider $provider
     $id = $provider->getResourceOwner($token)->getId();
     $request->session()->put('account_id', $id);
 
+    /** @var User $user */
     $user = User::firstOrNew(['account_id' => $id]);
     $user->updateToken($token);
 
@@ -94,7 +95,6 @@ $router->get('/config', function (Request $request) {
         return new RedirectResponse('/');
     }
 
-    /** @var Hook $hook */
     $hook = $user->hook;
 
     return view('config', [

@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use SunAsterisk\Chatwork\Helpers\Webhook;
 
+
+/**
+ * @property User $user
+ * @property string $key
+ * @property string $token
+ * @property int $webhook_id
+ *
+ * @property string $target_room_id
+ */
 class Hook extends Model implements RoomLinkable, WebhookSettingLinkable
 {
     public function user()
