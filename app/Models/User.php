@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Chatwork\ServiceUrl;
 use Illuminate\Database\Eloquent\Model;
 use League\OAuth2\Client\Token\AccessToken;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 /**
  * @property Hook $hook
@@ -21,7 +22,11 @@ class User extends Model
 
     public function getToken(): AccessToken
     {
-        return new AccessToken(json_decode(decrypt($this->token), true));
+        try {
+            return new AccessToken(json_decode(decrypt($this->token), true));
+        } catch (DecryptException $e) {
+            return new AccessToken(json_decode($this->token, true));
+        }
     }
 
     public function updateToken(AccessToken $token)
