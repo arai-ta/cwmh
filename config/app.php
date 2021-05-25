@@ -15,6 +15,13 @@ return [
 
     'name' => env('APP_NAME', 'Lumen'),
 
+    // ソースの配布URL
+    'source_dist_url' => env('APP_SOURCE_DIST_URL', 'https://github.com/arai-ta/cwmh'),
+
+    // OAuthクライアント設定
+    'oauth_client_id' => env('OAUTH_CLIENT_ID'),
+    'oauth_client_secret' => env('OAUTH_CLIENT_SECRET'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

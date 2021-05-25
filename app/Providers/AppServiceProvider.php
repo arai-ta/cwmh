@@ -32,8 +32,8 @@ class AppServiceProvider extends ServiceProvider
             );
 
             return new ChatWorkProvider(
-                env('OAUTH_CLIENT_ID'),
-                env('OAUTH_CLIENT_SECRET'),
+                config('app.oauth_client_id'),
+                config('app.oauth_client_secret'),
                 url('/callback', [], true),
                 [
                     'httpClient' => new Client(['handler' => $stack])
