@@ -5,7 +5,7 @@
 </x-slot>
 
 <x-slot name="header">
-    {{ env('APP_NAME') }}
+    {{ config('app.name') }}
 </x-slot>
 
 <h2>これは何？</h2>

@@ -20,7 +20,7 @@ class NotifyRoomDescription
     public static function create(): self
     {
         return new self(
-            env('APP_NAME'),
+            config('app.name'),
             url('config', [], true),
             time()
         );

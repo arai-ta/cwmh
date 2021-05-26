@@ -2,7 +2,7 @@
     <head>
         <title>
 @isset($title) {{ $title . ' - ' }} @endisset
-{{ env('APP_NAME') }}
+{{ config('app.name') }}
         </title>
     </head>
     <body>
