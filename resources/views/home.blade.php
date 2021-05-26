@@ -8,6 +8,54 @@
     {{ config('app.name') }}
 </x-slot>
 
+    <main>
+        <div class="container">
+            <div class="p-5 rounded">
+                <div class="col-sm-8 mx-auto">
+                    <h1>{{ config('app.name') }}</h1>
+                    <p>cwmhはChatworkの通知履歴を保存するOSSのwebアプリです。</p>
+                    <p>もう通知されたメッセージを見失いません。</p>
+                    <p>
+                        <a class="btn btn-primary" href="/start" role="button">使いはじめる »</a>
+                        <!-- <a class="btn btn-secondary" href="/start?kcw=1" role="button">KDDI Chatworkを利用中の方はこちら »</a> -->
+                    </p>
+                </div>
+            </div>
+            <div class="bg-light p-5 rounded">
+                <div class="col-sm-8 mx-auto">
+                    <h2>特徴</h2>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+
+                            <h3>分かりやすい表示</h3>
+                            <p>通知の種類を判別してアイコン表示します。</p>
+                        </div><!-- /.col-lg-4 -->
+                        <div class="col-lg-4">
+                            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+
+                            <h3>スムーズな連携</h3>
+                            <p>Chatwork自体に履歴を保存するため履歴をシームレスに閲覧できます。</p>
+                        </div><!-- /.col-lg-4 -->
+                        <div class="col-lg-4">
+                            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+
+                            <h3>3ステップで開始</h3>
+                            <p>利用設定がWebブラウザで完結します。</p>
+                        </div><!-- /.col-lg-4 -->
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
 <h2>これは何？</h2>
 
 <p>Chatworkの通知履歴を保存・閲覧できるオープンソースなwebアプリケーションです。</p>
