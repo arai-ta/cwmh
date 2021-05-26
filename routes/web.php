@@ -138,11 +138,11 @@ $router->post('/setroom', function (Request $request, ChatWorkProvider $provider
         'icon_preset' => 'check',
     ]);
 
-    $hook = new Hook();
+    /** @var Hook $hook */
+    $hook = Hook::firstOrNew(['user_id' => $user->id]);
     $hook->setRoomId($result['room_id']);
     $hook->generateKey();
-
-    $user->hook()->save($hook);
+    $hook->save();
 
     return new RedirectResponse('/config');
 });
