@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'sqlite'),
 
     /*
     |--------------------------------------------------------------------------
@@ -61,6 +61,12 @@ return [
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
             'strict'    => env('DB_STRICT_MODE', true),
             'timezone'  => env('DB_TIMEZONE', '+00:00'),
+        ],
+
+        'sqlite' => [
+            'driver'    => 'sqlite',
+            'database'  => database_path('db.sqlite'),
+            'prefix'    => '',
         ],
 
         'testing_sqlite' => [

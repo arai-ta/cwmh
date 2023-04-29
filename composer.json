@@ -7,7 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
-        "chatwork/oauth2-chatwork": "^0.1.2",
+        "chatwork/oauth2-chatwork": "dev-upgrade-to-php8",
         "laravel/lumen-framework": "^8.0",
         "revolution/laravel-logger-chatwork": "dev-master",
         "sun-asterisk/chatwork-php": "^0.2.0"
@@ -43,6 +43,10 @@
         ]
     },
     "repositories": {
+        "chatwork/oauth2-chatwork-php": {
+            "type": "vcs",
+            "url": "https://github.com/arai-ta/oauth2-chatwork-php"
+        },
         "revolution/laravel-logger-chatwork": {
             "type": "vcs",
             "url": "https://github.com/arai-ta/laravel-logger-chatwork"
