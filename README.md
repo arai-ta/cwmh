@@ -1,3 +1,9 @@
+サービス本体への機能実装が実現したため、このリポジトリはアーカイブされました。
+
+https://go.chatwork.com/ja/news/update/202434.html
+
+----
+
 cwmh -- Chatwork Mention History
 ================================
 
